@@ -22,11 +22,32 @@ public class SpellingBee {
 	 */
 	
 	void stuffForYouToDo() {
-		// Write your code here...
-		
-		
-		
+		String word = getRandomWord();
+		//System.out.println(word);
+		String answer = null;
+		int number = 0;
+		do {
+			speak("Spell" + word);
+			answer = JOptionPane.showInputDialog("Type here:");
+
+			try {
+				while (!answer.equals(word)) {
+					answer = JOptionPane.showInputDialog("Wrong. Try again:");
+				}
+				stuffForYouToDo();
+				number++;
+			} catch (NullPointerException e) {
+				int exit = JOptionPane.showConfirmDialog(null, "Do you want to exit the game?");
+				if (exit == 0)
+					System.exit(0);
+			}
+		} while (number == 0);
+
 	}
+		
+		
+		
+	
 
 	public String getRandomWord() {
 		return words.get(new Random().nextInt(lines));
@@ -41,14 +62,17 @@ public class SpellingBee {
 	private ArrayList<String> words = new ArrayList<>();
 
 	public SpellingBee() {
+		
 		try {
 			// Get the amount of lines
-			LineNumberReader lnr = new LineNumberReader(new FileReader(new File("/usr/share/dict/words")));
+			String filePath = "res\\text.txt";
+			File file = new File(filePath);
+			LineNumberReader lnr = new LineNumberReader(new FileReader(new File("res\\text.txt")));
 			lnr.skip(Long.MAX_VALUE);// Skip to the end
 			lines = lnr.getLineNumber();// Get last line number
 			System.out.println(lines + " words loaded.");
 			lnr.close();
-			BufferedReader br = new BufferedReader(new FileReader(new File("/usr/share/dict/words")));
+			BufferedReader br = new BufferedReader(new FileReader(new File("res\\text.txt")));
 			for (int i = 0; i < lines; i++) {
 				words.add(br.readLine()); // adds every line to the array
 			}
